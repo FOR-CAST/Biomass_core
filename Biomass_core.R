@@ -28,7 +28,7 @@ defineModule(sim, list(
                   "SpaDES.core (>= 2.1.4)", "SpaDES.tools (>= 1.0.0.9001)",
                   "ianmseddy/LandR.CS@development (>= 2.0.0.9002)",
                   "PredictiveEcology/pemisc@development",
-                  "PredictiveEcology/LandR@development (>= 1.1.5.9016)"),
+                  "PredictiveEcology/LandR@development (>= 1.2.0.9015)"),
   parameters = rbind(
     defineParameter("calcSummaryBGM", "character", "end", NA, NA,
                     desc = paste("A character vector describing when to calculate the summary of biomass, growth and mortality",
@@ -367,6 +367,14 @@ doEvent.Biomass_core <- function(sim, eventTime, eventType, debug = FALSE) {
   switch(
     eventType,
     init = {
+      ## No tree species in this study area (sppEquiv has no rows, established by fireSense_ELFs):
+      ## cohortData is empty by construction, so there is no vegetation to simulate. Leave the
+      ## empty tables from Biomass_borealDataPrep as they are and schedule no events.
+      if (is.data.frame(sim$sppEquiv) && nrow(sim$sppEquiv) == 0L) {
+        message("Biomass_core: no tree species in this study area; no vegetation dynamics to simulate")
+        return(invisible(sim))
+      }
+
       ## do stuff for this event
 
       ## Define .plotInterval/.saveInterval if need be
@@ -714,7 +722,7 @@ Init <- function(sim, verbose = getOption("LandR.verbose", TRUE)) {
               cli::col_blue("'cohortData' or 'pixelGroupMap'.\n If this is wrong, provide matching ",
                    "'cohortData', 'pixelGroupMap' and 'ecoregionMap'"))
     }
-    ecoregionMap <- makeDummyEcoregionMaP(sim$rasterToMatch)
+    ecoregionMap <- makeDummyEcoregionMap(sim$rasterToMatch)
 
     if (suppliedElsewhere("biomassMap", sim, where = "sim"))
       message(cli::col_blue("'biomassMap' was supplied, but "),
@@ -723,7 +731,7 @@ Init <- function(sim, verbose = getOption("LandR.verbose", TRUE)) {
                    "'cohortData', 'pixelGroupMap' and 'biomassMap'"))
     ## note that to make the dummy sim$biomassMap, we need to first make a dummy rawBiomassMap
     httr::with_config(config = httr::config(ssl_verifypeer = P(sim)$.sslVerify), {
-      rawBiomassMap <- makeDummyRawBiomassMaP(sim$rasterToMatch)
+      rawBiomassMap <- makeDummyRawBiomassMap(sim$rasterToMatch)
     })
 
     if (suppliedElsewhere("standAgeMap", sim, where = "sim"))
@@ -867,7 +875,7 @@ Init <- function(sim, verbose = getOption("LandR.verbose", TRUE)) {
 
     ## Create initial communities, i.e., pixelGroups -----------------------
     if (!suppliedElsewhere("columnsForPixelGroups", sim, where = "sim")) {
-      columnsForPixelGroups <- LandR::columnsForPixelGroups
+      columnsForPixelGroups <- LandR::columnsForPixelGroups()
     } else {
       columnsForPixelGroups <- sim$columnsForPixelGroups
     }
