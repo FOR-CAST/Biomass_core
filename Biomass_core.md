@@ -1,6 +1,6 @@
 ---
 title: "LandR _Biomass_core_ Manual"
-date: "Last updated: 2026-09-20"
+date: "Last updated: 2026-09-21"
 output:
   bookdown::html_document2:
     toc: true
@@ -44,7 +44,7 @@ always_allow_html: true
 
 
 
-[![module-version-Badge](/home/runner/work/Biomass_core/Biomass_core/figures/moduleVersionBadge.png)](https://github.com/FOR-CAST/Biomass_core2470b026f3f5790d664d41fdc8b2a4d588d29cea)
+[![module-version-Badge](/home/runner/work/Biomass_core/Biomass_core/figures/moduleVersionBadge.png)](https://github.com/PredictiveEcology/Biomass_core897b338ffb831725ba04d4967c6494e98fd51766)
 
 [![Issues-badge](/home/runner/work/Biomass_core/Biomass_core/figures/issuesBadge.png)](https://github.com/PredictiveEcology/Biomass_core/issues)
 
@@ -848,8 +848,8 @@ follow `species$speciesCode`.
 If provided, *Biomass_core* uses this vector to (attempt to) obtain `speciesLayers`
 for the listed species. If not provided, the user (or another module) can pass a filtered `sppEquiv` table
 (i.e., containing only the species that are to be simulated). If neither is provided,
-then *Biomass_core* attempts to use any species for which if finds available species
-(ref:percent) cover data in the study area.
+then *Biomass_core* attempts to use any species for which if finds available
+species (ref:percent) cover data in the study area.
 
 **Cohort-simulation-related objects**
 
@@ -1247,10 +1247,10 @@ event (growth and mortality are always yearly);
   <tr>
    <td style="text-align:left;"> vegLeadingProportion </td>
    <td style="text-align:left;"> numeric </td>
-   <td style="text-align:left;"> 0.8 </td>
+   <td style="text-align:left;"> 0.75 </td>
    <td style="text-align:left;"> 0 </td>
    <td style="text-align:left;"> 1 </td>
-   <td style="text-align:left;"> A number that defines whether a species is leading for a given pixel. Default: `getOption('NTEMS.mixedwoodProp', getOption('LandR.vegLeadingProportion', 0.8))`, so one option sets it for every module and LandR function. </td>
+   <td style="text-align:left;"> A number that defines whether a species is leading for a given pixel. Default: `LandR::leadingSpeciesProp()`, i.e. option `LandR.leadingSpeciesProp`, which takes `LandR.mixedwoodProp` (0.75) unless set. Setting it in one place moves every module and LandR function together. </td>
   </tr>
   <tr>
    <td style="text-align:left;"> .maxMemory </td>
