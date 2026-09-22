@@ -44,9 +44,9 @@ always_allow_html: true
 
 
 
-[![module-version-Badge](/home/runner/work/Biomass_core/Biomass_core/figures/moduleVersionBadge.png)](https://github.com/FOR-CAST/Biomass_coredce7eeac923153f1219862edf808934ee452c30c)
+[![module-version-Badge](figures/moduleVersionBadge.png)](https://github.com/PredictiveEcology/Biomass_corea8ac49705446ceddee39df6699b74c51314396e1)
 
-[![Issues-badge](/home/runner/work/Biomass_core/Biomass_core/figures/issuesBadge.png)](https://github.com/PredictiveEcology/Biomass_core/issues)
+[![Issues-badge](figures/issuesBadge.png)](https://github.com/PredictiveEcology/Biomass_core/issues)
 
 #### Authors:
 
