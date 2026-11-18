@@ -45,75 +45,13 @@ always_allow_html: true
 knitr::opts_chunk$set(echo = TRUE, eval = FALSE, warning = FALSE, 
                       cache = TRUE, cache.rebuild = FALSE, results = "hold", dpi = 300)
 
-## get citation style
-if (!file.exists("citations/ecology-letters.csl")) {
-  dir.create("citations", showWarnings = FALSE)
-  download.file("https://www.zotero.org/styles/ecology-letters", destfile = "citations/ecology-letters.csl")
-}
-
-library(Require)
-
-Require(c("SpaDES.core", "git2r",  "dplyr", "data.table", "kableExtra",
-          "openxlsx", "pander", "PredictiveEcology/SpaDES.docs"),
-        upgrade = FALSE, install = FALSE)
-```
-
-```{r badgeFigs-Biomass-core, include = FALSE, eval = TRUE, cache = FALSE}
-dir.create("figures", showWarnings = FALSE)
-
-if (!file.exists("figures/markdownBadge.png")) {
-  download.file(url = "https://img.shields.io/badge/Made%20with-Markdown-1f425f.png",
-                destfile = "figures/markdownBadge.png",
-                mode = 'wb')
-}
-if (!file.exists("figures/issuesBadge.png")) {
-  download.file(url = "https://img.shields.io/badge/Get%20help-Report%20issues-%3CCOLOR%3E.png",
-                destfile = "figures/issuesBadge.png",
-                mode = 'wb')
-}
-
-modversion <- paste(unlist(moduleMetadata(module = 'Biomass_core', path = '..')$version), collapse = ".")
-download.file(url = paste0("https://img.shields.io/badge/Biomass_core-", paste0("v.%20", modversion),
-                           "-%3CCOLOR%3E.png"),
-              destfile = "figures/moduleVersionBadge.png",
-              mode = 'wb')
-```
-
-``` {r moduleBadge-Biomass-core, echo = FALSE, eval = TRUE, cache = FALSE, results = "asis"}
-## try to automatically get the commit URL and the path to the badge image
-modulePath <- if (grepl("Biomass_core$", normPath("."))) {
-  normPath(".")
-} else {
-  modulePath <- grep("Biomass_core$", 
-                     list.files(pattern = "Biomass_core", recursive = TRUE, include.dirs = TRUE),
-                     value = TRUE)
-  modulePath <- grep("docs/", modulePath, value = TRUE, invert = TRUE)  ## exclude "copied" modules dirs for bookdown
-  normPath(modulePath)
-}
-
-badgeURL <- if (!is_detached(modulePath)) {
-  commitSHA <- sha(revparse_single(modulePath, "HEAD"))
-  repo <- sub("[.]git$", "/commit/",
-              branch_remote_url(branch_get_upstream(repository_head(modulePath))))
-  paste0(repo, commitSHA)
-} else {
-  ## if detached point to the first remote
-  remote_url(modulePath)[1]
-}
-badgeURL <- sub(".*github[.]com:", "https://github.com/", badgeURL)
-
-badgePath <- SpaDES.docs::stageFigure("figures/moduleVersionBadge.png")
-
-## make string of markdown code to be executed as-is
-cat(paste0("[![module-version-Badge](", badgePath, ")](", badgeURL, ")"))
-```
-
-``` {r issuesBadge-Biomass-core, echo = FALSE, eval = TRUE, cache = FALSE, results = "asis"}
-badgeURL <- "https://github.com/PredictiveEcology/Biomass_core/issues"
-badgePath <- SpaDES.docs::stageFigure("figures/issuesBadge.png")
-
-## make string of markdown code to be executed as-is
-cat(paste0("[![Issues-badge](", badgePath, ")](", badgeURL,")"))
+library(SpaDES.core)
+library(dplyr)
+library(data.table)
+library(kableExtra)
+library(openxlsx)
+library(pander)
+library(SpaDES.docs)
 ```
 
 #### Authors:
@@ -563,7 +501,7 @@ object that **must be supplied by the user or another module**.
 
 -   `speciesLayers` -- layers of species (ref:percent) cover data. Default data
 currently comes from the Spatialized Canadian National Forest Inventory 
-[`SCANFI`; @Guindon2023, @Guindon2024], a raster-based database of forest 
+[`SCANFI`; @Guindon2023; @Guindon2024], a raster-based database of forest 
 characteristics including species covers. The species must match those 
 available in default (or provided) species traits tables (the `species` 
 and `speciesEcoregion` tables).
