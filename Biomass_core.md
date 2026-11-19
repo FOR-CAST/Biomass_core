@@ -42,6 +42,12 @@ always_allow_html: true
 
 
 
+
+
+[![module-version-Badge](figures/moduleVersionBadge.png)](https://github.com/FOR-CAST/Biomass_core01a313047985bbc39ba3e1e591bc3f793043f972)
+
+[![Issues-badge](figures/issuesBadge.png)](https://github.com/PredictiveEcology/Biomass_core/issues)
+
 #### Authors:
 
 Yong Luo <yluo1@lakeheadu.ca> [aut], Eliot J B McIntire <eliot.mcintire@nrcan-rncan.gc.ca> [aut, cre], Ceres Barros <ceres.barros@ubc.ca> [aut], Alex M. Chubaty <achubaty@for-cast.ca> [aut], Ian Eddy <ian.eddy@nrcan-rncan.gc.ca> [ctb], Jean Marchal <jean.d.marchal@gmail.com> [ctb]
