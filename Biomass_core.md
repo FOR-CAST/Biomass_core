@@ -1,6 +1,6 @@
 ---
 title: "LandR _Biomass_core_ Manual"
-date: "Last updated: 2026-11-23"
+date: "Last updated: 2026-11-24"
 output:
   bookdown::html_document2:
     toc: true
@@ -44,7 +44,7 @@ always_allow_html: true
 
 
 
-[![module-version-Badge](figures/moduleVersionBadge.png)](https://github.com/FOR-CAST/Biomass_core/commit/36eb571a3afe3cdd360998c094532cfe4b001048)
+[![module-version-Badge](figures/moduleVersionBadge.png)](https://github.com/PredictiveEcology/Biomass_core57e5867448cfd6254d7a9e41070277a21d079fa0)
 
 [![Issues-badge](figures/issuesBadge.png)](https://github.com/PredictiveEcology/Biomass_core/issues)
 
@@ -668,9 +668,9 @@ user-defined tables.
 
 A species' probability of germination results from the combination of its shade
 tolerance level (an invariant species trait in the `species` table; Table
-\@ref(tab:invariantSpptraits)) and the site shade [defined by the amount of
-biomass in the pixel -- see [minimum relative biomass
-parameter](#ecolocation-traits) and @SchellerMiranda2015,p.14]. By default, both
+\@ref(tab:invariantSpptraits)) and the site shade -- defined by the amount of
+biomass in the pixel, see [minimum relative biomass
+parameter](#ecolocation-traits) -- [@SchellerMiranda2015, p. 14]. By default, both
 *Biomass_core* and *Biomass_borealDataPrep* use a publicly available LANDIS-II
 table (called `sufficientLight` in the module; Table \@ref(tab:suffLight)).
 
@@ -804,7 +804,7 @@ object that **must be supplied by the user or another module**.
 
 -   `speciesLayers` -- layers of species (ref:percent) cover data. Default data
 currently comes from the Spatialized Canadian National Forest Inventory 
-[`SCANFI`; @Guindon2023; @Guindon2024], a raster-based database of forest 
+[`SCANFI`; @Guindon2023, @Guindon2024], a raster-based database of forest 
 characteristics including species covers. The species must match those 
 available in default (or provided) species traits tables (the `species` 
 and `speciesEcoregion` tables).
@@ -942,6 +942,12 @@ and `B` composition, even if the user supplies other initial groupings
    <td style="text-align:left;"> NA </td>
   </tr>
   <tr>
+   <td style="text-align:left;"> minRelativeB </td>
+   <td style="text-align:left;"> data.frame </td>
+   <td style="text-align:left;"> table defining the relative biomass cut points to classify stand shadeness. Needed when `cohortData` and `pixelGroupMap` are supplied; otherwise it is made together with them (dummy version) </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
    <td style="text-align:left;"> pixelGroupMap </td>
    <td style="text-align:left;"> SpatRaster </td>
    <td style="text-align:left;"> A raster layer with `pixelGroup` IDs per pixel. Pixels are grouped based on identical `ecoregionGroup`, `speciesCode`, `age` and `B` composition, even if the user supplies other initial groupings (e.g., via the `Biomass_borealDataPrep` module. </td>
@@ -956,7 +962,7 @@ and `B` composition, even if the user supplies other initial groupings
   <tr>
    <td style="text-align:left;"> species </td>
    <td style="text-align:left;"> data.table </td>
-   <td style="text-align:left;"> A table of invariant species traits with the following trait colums: 'species', 'Area', 'longevity', 'sexualmature', 'shadetolerance', 'firetolerance', 'seeddistance_eff', 'seeddistance_max', 'resproutprob', 'mortalityshape', 'growthcurve', 'resproutage_min', 'resproutage_max', 'postfireregen', 'wooddecayrate', 'leaflongevity' 'leafLignin', 'hardsoft'. The last seven traits are not used in Biomass_core , and may be ommited. However, this may result in downstream issues with other modules. Default is from Dominic Cyr and Yan Boulanger's project </td>
+   <td style="text-align:left;"> A table of invariant species traits with the following trait colums: 'species', 'Area', 'longevity', 'sexualmature', 'shadetolerance', 'firetolerance', 'seeddistance_eff', 'seeddistance_max', 'resproutprob', 'mortalityshape', 'growthcurve', 'resproutage_min', 'resproutage_max', 'postfireregen', 'wooddecayrate', 'leaflongevity' 'leafLignin', 'hardsoft'. The last seven traits are not used in Biomass_core , but are required by `LandR::assertSpeciesTable()` (unless `options(LandR.assertions = FALSE)`), and by other modules. Default is from Dominic Cyr and Yan Boulanger's project </td>
    <td style="text-align:left;"> https://raw.githubusercontent.com/dcyr/LANDIS-II_IA_generalUseFiles/master/speciesTraits.csv </td>
   </tr>
   <tr>
@@ -968,7 +974,7 @@ and `B` composition, even if the user supplies other initial groupings
   <tr>
    <td style="text-align:left;"> speciesLayers </td>
    <td style="text-align:left;"> SpatRaster </td>
-   <td style="text-align:left;"> cover percentage raster layers by species in Canada species map. Defaults to the Canadian Forestry Service, National Forest Inventory, SCANFI-derived species cover maps from 2020 using a cover threshold of 10 - see &lt;https://open.canada.ca/data/en/dataset/18e6a919-53fd-41ce-b4e2-44a9707c52dc&gt; for metadata </td>
+   <td style="text-align:left;"> cover percentage raster layers by species in Canada species map. Defaults to the Canadian Forestry Service, National Forest Inventory, SCANFI-derived species cover maps from `dataYear` (default 2020) using a cover threshold of 10 - see &lt;https://open.canada.ca/data/en/dataset/18e6a919-53fd-41ce-b4e2-44a9707c52dc&gt; for metadata </td>
    <td style="text-align:left;"> NA </td>
   </tr>
   <tr>
@@ -1127,7 +1133,7 @@ event (growth and mortality are always yearly);
    <td style="text-align:left;"> 2020 </td>
    <td style="text-align:left;"> NA </td>
    <td style="text-align:left;"> NA </td>
-   <td style="text-align:left;"> the year for which SCANFI data wil be fetched for use with the module. One of 2000, 2010, or 2020, but note that only 2020 is currently supported. </td>
+   <td style="text-align:left;"> the year for which SCANFI data wil be fetched for use with the module. One of 1985, 1990, 1995, 2000, 2005, 2010, 2015, 2020 or 2025 (SCANFI v2). Only used if `speciesLayers` are not supplied. </td>
    <td style="text-align:left;"> TRUE </td>
   </tr>
   <tr>
@@ -1200,6 +1206,33 @@ event (growth and mortality are always yearly);
    <td style="text-align:left;"> NA </td>
    <td style="text-align:left;"> NA </td>
    <td style="text-align:left;"> Cohorts with biomass below this threshold (in $g/m^2$) are removed. Not a LANDIS-II BSE parameter. </td>
+   <td style="text-align:left;"> TRUE </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> cohortEstablishmentLimit </td>
+   <td style="text-align:left;"> numeric </td>
+   <td style="text-align:left;"> NA </td>
+   <td style="text-align:left;"> NA </td>
+   <td style="text-align:left;"> NA </td>
+   <td style="text-align:left;"> `NA` (default) is off. Otherwise `c(interval, minCohorts)`: a species in a pixelGroup that already has more than `minCohorts` cohorts older than newly established ones can receive new seed-established cohorts only when `time(sim)` is a multiple of `interval` (years); at other succession steps its establishment there is skipped. Species with `minCohorts` or fewer cohorts establish every succession step. `interval` must be a positive multiple of `successionTimestep`; `minCohorts` must be &gt;= 0. Serotiny and resprouting (post-fire cohorts) are not restricted. Limits cohort numbers but changes results. Tested values: `c(20, 5)` (keeps 76% of table rows, with about 10% biomass bias with no fire) and `c(20, 2)` (62% of rows, 15% bias). It only limits establishment, so the LandR-CBM module/package needs no changes. </td>
+   <td style="text-align:left;"> TRUE </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> cohortRemoveSuppressed </td>
+   <td style="text-align:left;"> numeric </td>
+   <td style="text-align:left;"> NA </td>
+   <td style="text-align:left;"> NA </td>
+   <td style="text-align:left;"> NA </td>
+   <td style="text-align:left;"> `NA` (default) is off. Otherwise `c(relativeB, minAgeFrac)`, both between 0 and 1: a cohort is removed each year when its B is below `relativeB` times the total B of its pixelGroup and its age is above `minAgeFrac` longevity; a species' last cohort in a pixelGroup is never removed. Changes results. Tested value: `c(0.01, 0.75)`. It only removes cohorts, so the LandR-CBM module/package needs no changes. </td>
+   <td style="text-align:left;"> TRUE </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> cohortSquash </td>
+   <td style="text-align:left;"> numeric </td>
+   <td style="text-align:left;"> NA </td>
+   <td style="text-align:left;"> NA </td>
+   <td style="text-align:left;"> NA </td>
+   <td style="text-align:left;"> `NA` (default) is off. Otherwise `c(interval, width, ...)`: when a cohort reaches a multiple of `interval` (years), it is merged with same-species cohorts in its pixelGroup up to `width` years younger (B, mortality and aNPPAct summed, age the B-weighted mean age in whole years). With more than one `width`, the k-th multiple of `interval` uses the k-th width and the last width repeats, so older cohorts can be merged more coarsely. `interval` and every `width` must be positive multiples of `successionTimestep`. Reduces cohort numbers in long runs but changes results. Tested value: `c(100, 20)`. Squashing changes what a cohort is, so it breaks the LandR-CBM module/package, which converts LandR cohorts to CBM growth curves; that code would need changes before it can be used with this option. </td>
    <td style="text-align:left;"> TRUE </td>
   </tr>
   <tr>
@@ -1662,6 +1695,297 @@ and mortality (`summaryBGM` event);
 execution of one or more modules by parsing and checking their code and
 executing the `.inputObjects` function(s), where the developer provides
 mechanisms to satisfy each module's expected inputs with default values.
+
+
+
+<div class="figure">
+<img src="figures/Biomass_core_eventFlow.png" alt="(ref:Biomass-core) events, as read from the module code with its default parameters." width="100%" />
+<p class="caption">(\#fig:eventFlow-Biomass-core)(ref:Biomass-core) events, as read from the module code with its default parameters.</p>
+</div>
+
+Table \@ref(tab:eventObjects-Biomass-core) lists, for each object, the code that writes it and the code that only reads it.
+
+<table class="table" style="width: auto !important; border-bottom: 0;">
+<caption>(\#tab:eventObjects-Biomass-core)Where each object of (ref:Biomass-core) is written and read, in run order.</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Object </th>
+   <th style="text-align:left;"> Written by </th>
+   <th style="text-align:left;"> Read by </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr grouplength="7"><td colspan="3" style="border-bottom: 1px solid;"><strong>Inputs</strong></td></tr>
+<tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> studyArea </td>
+   <td style="text-align:left;"> .inputObjects (default) </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> columnsForPixelGroups </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> init </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> rasterToMatch </td>
+   <td style="text-align:left;"> .inputObjects (default) </td>
+   <td style="text-align:left;"> init, mortalityAndGrowth, plotSummaryBySpecies </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> sppEquiv </td>
+   <td style="text-align:left;"> .inputObjects (default) </td>
+   <td style="text-align:left;"> init </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> studyAreaReporting </td>
+   <td style="text-align:left;"> .inputObjects (default) </td>
+   <td style="text-align:left;"> init, plotSummaryBySpecies, plotMaps </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> sufficientLight </td>
+   <td style="text-align:left;"> .inputObjects (default) </td>
+   <td style="text-align:left;"> Dispersal </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> cceArgs </td>
+   <td style="text-align:left;"> .inputObjects (default) </td>
+   <td style="text-align:left;"> mortalityAndGrowth </td>
+  </tr>
+  <tr grouplength="13"><td colspan="3" style="border-bottom: 1px solid;"><strong>Inputs the module also updates</strong></td></tr>
+<tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> biomassMap </td>
+   <td style="text-align:left;"> init </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> cohortData </td>
+   <td style="text-align:left;"> init, Dispersal, mortalityAndGrowth, cohortAgeReclassification </td>
+   <td style="text-align:left;"> summaryRegen, summaryBGM, plotSummaryBySpecies, plotAvgs </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> ecoregion </td>
+   <td style="text-align:left;"> init </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> ecoregionMap </td>
+   <td style="text-align:left;"> init </td>
+   <td style="text-align:left;"> Dispersal, summaryBGM </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> lastReg </td>
+   <td style="text-align:left;"> init, Dispersal </td>
+   <td style="text-align:left;"> mortalityAndGrowth </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> minRelativeB </td>
+   <td style="text-align:left;"> init </td>
+   <td style="text-align:left;"> Dispersal </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> pixelGroupMap </td>
+   <td style="text-align:left;"> init, Dispersal, mortalityAndGrowth </td>
+   <td style="text-align:left;"> summaryRegen, summaryBGM, plotSummaryBySpecies, plotAvgs </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> species </td>
+   <td style="text-align:left;"> .inputObjects (default), init </td>
+   <td style="text-align:left;"> Dispersal, mortalityAndGrowth, plotSummaryBySpecies, plotMaps, plotAvgs </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> speciesEcoregion </td>
+   <td style="text-align:left;"> init </td>
+   <td style="text-align:left;"> Dispersal, mortalityAndGrowth </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> speciesLayers </td>
+   <td style="text-align:left;"> .inputObjects (default), init </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> sppColorVect </td>
+   <td style="text-align:left;"> .inputObjects (default), init </td>
+   <td style="text-align:left;"> summaryBGM, plotSummaryBySpecies, plotMaps </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> sppNameVector </td>
+   <td style="text-align:left;"> .inputObjects (default), init </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> treedFirePixelTableSinceLastDisp </td>
+   <td style="text-align:left;"> .inputObjects (default), Dispersal </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr grouplength="17"><td colspan="3" style="border-bottom: 1px solid;"><strong>Outputs</strong></td></tr>
+<tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> activePixelIndex </td>
+   <td style="text-align:left;"> init </td>
+   <td style="text-align:left;"> Dispersal </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> activePixelIndexReporting </td>
+   <td style="text-align:left;"> init </td>
+   <td style="text-align:left;"> plotSummaryBySpecies </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> inactivePixelIndex </td>
+   <td style="text-align:left;"> init </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> inactivePixelIndexReporting </td>
+   <td style="text-align:left;"> init </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> lastFireYear </td>
+   <td style="text-align:left;"> init </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> regenerationOutput </td>
+   <td style="text-align:left;"> init, Dispersal </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> simulatedBiomassMap </td>
+   <td style="text-align:left;"> init, summaryBGM </td>
+   <td style="text-align:left;"> plotMaps </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> simulationOutput </td>
+   <td style="text-align:left;"> init, summaryBGM </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> simulationTreeOutput </td>
+   <td style="text-align:left;"> init, mortalityAndGrowth </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> spinupOutput </td>
+   <td style="text-align:left;"> init </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> vegTypeMap </td>
+   <td style="text-align:left;"> init, summaryBGM </td>
+   <td style="text-align:left;"> plotSummaryBySpecies, plotMaps </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> reproductionMap </td>
+   <td style="text-align:left;"> summaryRegen </td>
+   <td style="text-align:left;"> plotMaps </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> ANPPMap </td>
+   <td style="text-align:left;"> summaryBGM </td>
+   <td style="text-align:left;"> plotMaps </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> mortalityMap </td>
+   <td style="text-align:left;"> summaryBGM </td>
+   <td style="text-align:left;"> plotMaps </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> summaryBySpecies </td>
+   <td style="text-align:left;"> plotSummaryBySpecies </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> summaryBySpecies1 </td>
+   <td style="text-align:left;"> plotSummaryBySpecies </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> summaryLandscape </td>
+   <td style="text-align:left;"> plotAvgs </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+</tbody>
+<tfoot><tr><td style="padding: 0; " colspan="100%">
+<sup></sup> Not shown, off with the default parameters: summaryBGMstart, summaryBGMpostDisp, summaryBGMpostRegen, summaryBGMpostGM, summaryBGMpostAging, buildVTM, plotTransitions, save.</td></tr></tfoot>
+</table>
+
+
+#### .inputObjects {-}
+
+during simInit: defaults for inputs not supplied
+
+![](figures/Biomass_core_io_.inputObjects.png){width=100%}
+
+
+
+#### init {-}
+
+the init event
+
+![](figures/Biomass_core_io_init.png){width=100%}
+
+
+
+#### Dispersal {-}
+
+every 10 years (successionTimestep); first at start + 10 years
+
+![](figures/Biomass_core_io_Dispersal.png){width=100%}
+
+
+
+#### mortalityAndGrowth {-}
+
+every year; first at start (growthInitialTime)
+
+![](figures/Biomass_core_io_mortalityAndGrowth.png){width=100%}
+
+
+
+#### cohortAgeReclassification {-}
+
+every 10 years (successionTimestep); first at start + 10 years
+
+![](figures/Biomass_core_io_cohortAgeReclassification.png){width=100%}
+
+
+
+#### summaryRegen {-}
+
+every 10 years (successionTimestep); first at start + 10 years
+
+![](figures/Biomass_core_io_summaryRegen.png){width=100%}
+
+
+
+#### summaryBGM {-}
+
+every 10 years (successionTimestep); first at start
+
+![](figures/Biomass_core_io_summaryBGM.png){width=100%}
+
+
+
+#### plotSummaryBySpecies {-}
+
+every 10 years (.plotInterval); first at start; and at end
+
+![](figures/Biomass_core_io_plotSummaryBySpecies.png){width=100%}
+
+
+
+#### plotMaps {-}
+
+every 10 years (.plotInterval); first at start (.plotInitialTime)
+
+![](figures/Biomass_core_io_plotMaps.png){width=100%}
+
+
+
+#### plotAvgs {-}
+
+every 10 years (.plotInterval); first at start; and at end
+
+![](figures/Biomass_core_io_plotAvgs.png){width=100%}
 
 ### Differences between *Biomass_core* and the LANDIS-II Biomass Succession Extension model (LBSE) {#biomass-core-vs-lbse}
 
