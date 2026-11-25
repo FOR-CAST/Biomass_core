@@ -1,6 +1,6 @@
 ---
 title: "LandR _Biomass_core_ Manual"
-date: "Last updated: 2026-11-24"
+date: "Last updated: 2026-11-25"
 output:
   bookdown::html_document2:
     toc: true
@@ -44,7 +44,7 @@ always_allow_html: true
 
 
 
-[![module-version-Badge](figures/moduleVersionBadge.png)](https://github.com/PredictiveEcology/Biomass_core57e5867448cfd6254d7a9e41070277a21d079fa0)
+[![module-version-Badge](figures/moduleVersionBadge.png)](https://github.com/FOR-CAST/Biomass_core/commit/a078c602b9aee1c33042c5e5714fba2f644d205e)
 
 [![Issues-badge](figures/issuesBadge.png)](https://github.com/PredictiveEcology/Biomass_core/issues)
 
@@ -804,7 +804,7 @@ object that **must be supplied by the user or another module**.
 
 -   `speciesLayers` -- layers of species (ref:percent) cover data. Default data
 currently comes from the Spatialized Canadian National Forest Inventory 
-[`SCANFI`; @Guindon2023, @Guindon2024], a raster-based database of forest 
+[`SCANFI`; @Guindon2023; @Guindon2024], a raster-based database of forest 
 characteristics including species covers. The species must match those 
 available in default (or provided) species traits tables (the `species` 
 and `speciesEcoregion` tables).
